@@ -1,0 +1,103 @@
+/*
+ * @lc app=leetcode id=1423 lang=java
+ *
+ * [1423] Maximum Points You Can Obtain from Cards
+ *
+ * https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/description/
+ *
+ * algorithms
+ * Medium (56.55%)
+ * Likes:    6837
+ * Dislikes: 298
+ * Total Accepted:    445.9K
+ * Total Submissions: 788.4K
+ * Testcase Example:  '[1,2,3,4,5,6,1]\n3'
+ *
+ * There are several cards arranged in a row, and each card has an associated
+ * number of points. The points are given in the integer array cardPoints.
+ * 
+ * In one step, you can take one card from the beginning or from the end of the
+ * row. You have to take exactly k cards.
+ * 
+ * Your score is the sum of the points of the cards you have taken.
+ * 
+ * Given the integer array cardPoints and the integer k, return the maximum
+ * score you can obtain.
+ * 
+ * 
+ * Example 1:
+ * 
+ * 
+ * Input: cardPoints = [1,2,3,4,5,6,1], k = 3
+ * Output: 12
+ * Explanation: After the first step, your score will always be 1. However,
+ * choosing the rightmost card first will maximize your total score. The
+ * optimal strategy is to take the three cards on the right, giving a final
+ * score of 1 + 6 + 5 = 12.
+ * 
+ * 
+ * Example 2:
+ * 
+ * 
+ * Input: cardPoints = [2,2,2], k = 2
+ * Output: 4
+ * Explanation: Regardless of which two cards you take, your score will always
+ * be 4.
+ * 
+ * 
+ * Example 3:
+ * 
+ * 
+ * Input: cardPoints = [9,7,7,9,7,7,9], k = 7
+ * Output: 55
+ * Explanation: You have to take all the cards. Your score is the sum of points
+ * of all cards.
+ * 
+ * 
+ * 
+ * Constraints:
+ * 
+ * 
+ * 1 <= cardPoints.length <= 10^5
+ * 1 <= cardPoints[i] <= 10^4
+ * 1 <= k <= cardPoints.length
+ * 
+ * 
+ */
+
+// @lc code=start
+class Solution {
+    public int maxScore(int[] cardPoints, int k) {
+        int n = cardPoints.length;
+
+        if (k == n) {
+            int total = 0;
+            for (int point : cardPoints) total += point;
+            return total;
+        }
+
+        if (k == 1) return Math.max(cardPoints[0], cardPoints[n - 1]);
+        
+        int total = 0;
+        for (int point : cardPoints) total += point;
+
+        int windowSize = n - k;
+        int windowSum = 0;
+        for (int i = 0; i < windowSize; i++) {
+            windowSum += cardPoints[i];
+        }
+
+        // sliding window to find the minimum sum of the subarray of size n - k
+        int minWindowSum = windowSum;
+        for (int i = windowSize; i < n; i++) {
+            windowSum += cardPoints[i];
+            windowSum -= cardPoints[i - windowSize];
+            
+            minWindowSum = Math.min(minWindowSum, windowSum);
+        }
+
+        return total - minWindowSum;
+    }
+}
+// @lc code=end
+
