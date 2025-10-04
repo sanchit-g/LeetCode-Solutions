@@ -63,6 +63,42 @@ class Solution {
         }
 
         int[] lastIndex = new int[26];
+
+        // store the last index of each character
+        for (int i = 0; i < s.length(); i++) {
+            int idx = s.charAt(i) - 'a';
+            lastIndex[idx] = i;
+        }
+
+        List<Integer> result = new ArrayList<>();
+
+        int partitionStart = 0;
+        int partitionEnd = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            int idx = s.charAt(i) - 'a';
+            // extend the partition end to the last index of the current character
+            partitionEnd = Math.max(partitionEnd, lastIndex[idx]);
+
+            // if we have reached the end of the partition
+            if (i == partitionEnd) {
+                // add the size of the partition to the result
+                result.add(partitionEnd - partitionStart + 1);
+                
+                // start a new partition
+                partitionStart = partitionEnd + 1;
+            }
+        }
+
+        return result;
+    }
+
+    public List<Integer> partitionLabels2(String s) {
+        if (s.length() == 1) {
+            return List.of(1);
+        }
+
+        int[] lastIndex = new int[26];
         
         int[] firstIndex = new int[26];
         Arrays.fill(firstIndex, -1);
