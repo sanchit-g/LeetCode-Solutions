@@ -53,7 +53,6 @@
  */
 
 // @lc code=start
-
 class Solution {
     private class ListNode {
         int val;
@@ -67,7 +66,7 @@ class Solution {
         ListNode temp = head;
         ListNode prevGroupLast = null;
 
-        while (temp != null) {
+        while (true) {
             ListNode kthNode = findKthNode(temp, k);
 
             if (kthNode == null) {
