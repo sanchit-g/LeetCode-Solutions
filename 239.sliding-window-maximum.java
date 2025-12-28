@@ -60,26 +60,30 @@ import java.util.*;
 
 class Solution {
     public int[] maxSlidingWindow(int[] nums, int k) {
-        int[] res = new int[nums.length - k + 1];
-        Deque<Integer> deque = new ArrayDeque<>();
+        int n = nums.length;
+        int[] result = new int[n - k + 1];
+        Deque<Integer> deque = new ArrayDeque<>(); // Stores indices
 
-        for (int i = 0; i < nums.length; i++) {
+        for (int i = 0; i < n; i++) {
+            // 1. Remove indices from the front that are out of the current window
+            if (!deque.isEmpty() && deque.peekFirst() <= i - k) {
+                deque.pollFirst();
+            }
+
+            // 2. Maintain monotonic decreasing property by removing smaller elements from the back
             while (!deque.isEmpty() && nums[deque.peekLast()] <= nums[i]) {
                 deque.pollLast();
             }
-            
+
+            // 3. Add the current index to the back
             deque.offerLast(i);
 
+            // 4. Record the maximum (front of the deque) for the window
             if (i >= k - 1) {
-                res[i - k + 1] = nums[deque.peekFirst()];
-            }
-
-            if (i - deque.peekFirst() >= k - 1) {
-                deque.pollFirst();
+                result[i - k + 1] = nums[deque.peekFirst()];
             }
         }
-
-        return res;
+        return result;
     }
 }
 // @lc code=end
