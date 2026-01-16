@@ -50,33 +50,37 @@ class Solution {
     public int trap(int[] height) {
         int n = height.length;
         
-        if (n == 0) return 0;
-
-        int[] leftMax = new int[n];
-        int[] rightMax = new int[n];
-
-        int mx = Integer.MIN_VALUE;
-
-        for (int i = 0; i < n; i++) {
-            mx = Math.max(mx, height[i]);
-            leftMax[i] = mx;
+        if (n == 0) {
+            return 0;
         }
 
-        mx = Integer.MIN_VALUE;
+        int left = 0, right = n - 1;
+        int leftMax = height[left], rightMax = height[right];
+        int trappedWater = 0;
 
-        for (int i = n - 1; i >= 0; i--) {
-            mx = Math.max(mx, height[i]);
-            rightMax[i] = mx;
+        while (left < right) {
+            // smaller height of the two sides
+            // is the limiting factor
+            if (height[left] < height[right]) {
+                if (leftMax < height[left]) {
+                    leftMax = height[left];
+                    // no trapped water here
+                } else {
+                    trappedWater += leftMax - height[left];
+                }
+                left++;
+            } else {
+                if (rightMax < height[right]) {
+                    rightMax = height[right];
+                    // no trapped water here
+                } else {
+                    trappedWater += rightMax - height[right];
+                }
+                right--;
+            }
         }
 
-        int waterTrapped = 0;
-
-        for (int i = 0; i < n; i++) {
-            waterTrapped += Math.min(leftMax[i], rightMax[i]) - height[i];
-        }
-
-        return waterTrapped;
+        return trappedWater;
     }
 }
 // @lc code=end
-
