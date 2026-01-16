@@ -57,6 +57,8 @@ class Solution {
 
         while (left < right) {
             if (s.charAt(left) != s.charAt(right)) {
+                // either skip left or right character
+                // as at most one character can be skipped
                 return isPalindrome(s, left + 1, right) || isPalindrome(s, left, right - 1);
             }
             left++;
